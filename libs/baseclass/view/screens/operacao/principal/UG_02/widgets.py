@@ -13,7 +13,7 @@ from kivy.utils import get_color_from_hex
 from libs.baseclass.assets.color import cores
 from kivymd.uix.textfield import MDTextField
 from kivy.animation import Animation
-# from os import getpid 
+# from os import getpid
 from os.path import join, abspath
 # from desempenho import Desempenho
 from libs.baseclass.view.widgets.gauge import WGauge
@@ -27,16 +27,16 @@ var =  StateVariable()
 
 
 class Gauge(MDFloatLayout):
-    
+
     gauge = ListProperty([120, 810, 70, 0, 360])
-    
-    
+
+
     def __init__(self,name, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.state = False
         self.name = name
         self.md_bg_color = cores['background']
-        
+
     def __call__(self):
         try:
             # layouts
@@ -55,38 +55,38 @@ class Gauge(MDFloatLayout):
                                         pos_hint={'x':0,'y': 0})
             # componentes
             gauge = WGauge(name='gauge_ug02')()
-            
+
             input_power = InputText(name='potencia')()
             button = ButtonEmergency(name='button_emergency')()
             # composicao
             box_gauge.add_widget(gauge)
             box_input.add_widget(input_power)
             box_emergency.add_widget(button)
-            
+
             self.add_widget(box_gauge)
             self.add_widget(box_input)
             self.add_widget(box_emergency)
             # bind
             box_gauge.bind(pos=gauge.update_size)
-            
+
             return self
-            
+
         except Exception as e:
             raise NotImplementedError(self.__class__.__name__ + str(e))
-            
+
         return self
 
 dados_ug01_a = {
-    
+
                 'Fase R'          : [100,20],
                 'Fase S'          : [300,30],
                 'Fase T'          : [100,40],
                 'Campo/Excitação' : [100,20],
-    
-    }    
+
+    }
 
 dados_ug01_b = {
-    
+
                 'Frequência'          : ['100','Hz'],
                 'Potência ativa'      : ['300','kW'],
                 'Potência reativa'    : ['100','kvar'],
@@ -95,13 +95,13 @@ dados_ug01_b = {
                 'Destribuidor'        : ['80','%'],
                 'Velocidade'          : ['100','RPM'],
                 'Acumulador de energia': ['48','MW']
-    
-      }   
+
+      }
 class Power(BuilderWidgets):
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
+
     def __call__(self):
         try:
             card_layout = MDCard()
@@ -126,7 +126,7 @@ class Power(BuilderWidgets):
                                 text_color=cores['background_widget'],
                                 pos_hint={'center_x':.5,'center_y':.5})
                 box_grid_titulo.add_widget(label)
-                
+
             for name,value in dados_ug01_a.items():
                 label_a = MDLabel(text=name,
                                 halign = "left",
@@ -161,7 +161,7 @@ class Power(BuilderWidgets):
                 linha.add_widget(label_c)
                 s+=1
                 box_grid.add_widget(linha)
-                
+
             label_subtitulo = MDLabel(text='',
                                     halign = "center",
                                     theme_text_color = "Custom",
@@ -172,9 +172,9 @@ class Power(BuilderWidgets):
                                 md_bg_color = cores['widget'],
                                 padding = [0,0,0,0],
                                 radius=[5,])
-            box_grid.add_widget(linha)  
+            box_grid.add_widget(linha)
             for name,value in dados_ug01_b.items():
-                
+
                 label_a = MDLabel(text=name,
                                 halign = "left",
                                 theme_text_color = "Custom",
@@ -197,12 +197,12 @@ class Power(BuilderWidgets):
                                         md_bg_color = cores['linha1'],
                                         padding = [10,10,10,10],
                                         radius=[5,])
-                
+
                 linha.add_widget(label_a)
                 linha.add_widget(label_b)
                 s+=1
                 box_grid.add_widget(linha)
-             
+
             box_titulo.add_widget(box_grid_titulo)
             box_tabela.add_widget(box_grid)
                 # nivel 1
@@ -214,10 +214,10 @@ class Power(BuilderWidgets):
             # s1.instance_time('B-Power')
             # s1.memory_size(getpid(),'Power')
             return card_layout
-            
+
         except Exception as e:
             print('Power: ',e)
-            
+
         return self
 
 temperature_ug01_a = {
@@ -226,7 +226,7 @@ temperature_ug01_a = {
                         'Enrol. fase C'  :[10],
                         'Núcleo estator' :[10],
                         'Excitatriz'     :[10],
-                        'Cubículo CS-U1' :[10],    
+                        'Cubículo CS-U1' :[10],
                     }
 
 temperature_ug01_b = {
@@ -236,13 +236,13 @@ temperature_ug01_b = {
                         'Contra escora'  :[10],
                         'UHRV óleo'      :[10],
                         'UHLM óleo'      :[10],
-    
+
                     }
 class Temperatures(BuilderWidgets):
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
+
     def __call__(self):
         try:
             card_layout = MDCard()
@@ -268,7 +268,7 @@ class Temperatures(BuilderWidgets):
                                 padding = [10,10,10,10],
                                 radius=[5,])
             linha.add_widget(label_subtitle)
-            box_grid.add_widget(linha) 
+            box_grid.add_widget(linha)
             s = 0
             for name,value in temperature_ug01_a.items():
                 label_a = MDLabel(text= name,
@@ -287,7 +287,7 @@ class Temperatures(BuilderWidgets):
                     linha = MDBoxLayout(orientation='horizontal',md_bg_color = cores['linha2'],radius=[5,],padding=[10,10,10,10])
                 else:
                     linha = MDBoxLayout(orientation='horizontal',md_bg_color = cores['linha1'],radius=[5,],padding=[10,10,10,10])
-                
+
                 linha.add_widget(label_a)
                 linha.add_widget(label_b)
                 box_grid.add_widget(linha)
@@ -303,7 +303,7 @@ class Temperatures(BuilderWidgets):
                                     text_color=cores['background_widget'],
                                     pos_hint={'center_x':.5,'center_y':.5})
             linha.add_widget(label_subtitle)
-            box_grid.add_widget(linha)  
+            box_grid.add_widget(linha)
             #---------------------------------------------------------
             s = 0
             for name,value in temperature_ug01_b.items():
@@ -323,7 +323,7 @@ class Temperatures(BuilderWidgets):
                     linha = MDBoxLayout(orientation='horizontal',md_bg_color = cores['linha2'],radius=[5,],padding=[10,10,10,10])
                 else:
                     linha = MDBoxLayout(orientation='horizontal',md_bg_color = cores['linha1'],radius=[5,],padding=[10,10,10,10])
-                
+
                 linha.add_widget(label_a)
                 linha.add_widget(label_b)
                 box_grid.add_widget(linha)
@@ -337,14 +337,14 @@ class Temperatures(BuilderWidgets):
             box_float.add_widget(box_tabela)
                 # nivel 3
             card_layout.add_widget(box_float)
-            
+
             # s1.instance_time('B-Temperatures')
             # s1.memory_size(getpid(),'Temperatures')
             return card_layout
-            
+
         except Exception as e:
             print('Temperatures : ',e)
-            
+
         return self
 
 
@@ -354,20 +354,20 @@ lubrification_a = {
                     'Bomba 02 - Ligada': True,
                     'Pressostato linha': True,
                     'Água trocador de calor' : True,
-    
+
     }
 
 lubrification_b = {
                     'unidade hidráulica operacional': True,
                     'Bomba 01 - Ligada': True,
-                    'Bomba 02 - Ligada': True,    
+                    'Bomba 02 - Ligada': True,
     }
 
 class Lubrification(BuilderWidgets):
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
+
     def __call__(self):
         try:
             card_layout = MDCard(md_bg_color = cores['alert'])
@@ -384,7 +384,7 @@ class Lubrification(BuilderWidgets):
                                     theme_text_color = "Custom",
                                     text_color=cores['background_widget'],
                                     pos_hint={'center_x':.5,'center_y':.5})
-            label_subtitle = MDLabel(text= 'UH Lubrificação do mancal (UHLM)',
+            label_subtitle = MDLabel(text= 'UH Lubrificação do UG-02 (UHLM)',
                                     halign = "center",
                                     theme_text_color = "Custom",
                                     font_style = 'Caption',
@@ -395,14 +395,14 @@ class Lubrification(BuilderWidgets):
                                 padding = [10,10,10,10],
                                 radius=[5,])
             linha.add_widget(label_subtitle)
-            box_grid.add_widget(linha) 
+            box_grid.add_widget(linha)
             s = 0
             for name,value in lubrification_a.items():
                 icon_lub = MDIconButton(icon="circle-outline",
                                         theme_text_color = "Custom",
                                         user_font_size = 15,
                                         pos_hint={'x': 0,'y':0},
-                                        text_color = cores['check']) 
+                                        text_color = cores['check'])
                 label_a = MDLabel(text= name,
                                 halign = "left",
                                 theme_text_color = "Custom",
@@ -428,15 +428,15 @@ class Lubrification(BuilderWidgets):
                                 padding = [10,10,10,10],
                                 radius=[5,])
             linha.add_widget(label_subtitle)
-            box_grid.add_widget(linha) 
+            box_grid.add_widget(linha)
             s = 0
             for name,value in lubrification_b.items():
-                
+
                 icon_lub = MDIconButton(icon="circle-outline",
                                         theme_text_color = "Custom",
                                         user_font_size = 15,
                                         pos_hint={'x': 0,'y':.1},
-                                        text_color = cores['check']) 
+                                        text_color = cores['check'])
                 label_a = MDLabel(text= name,
                                 halign = "left",
                                 theme_text_color = "Custom",
@@ -451,43 +451,44 @@ class Lubrification(BuilderWidgets):
                 linha.add_widget(label_a)
                 box_grid.add_widget(linha)
                 s+=1
-                
-            # with card_layout.canvas.after:
-            #     Color(rgba=(.4, .4, 1, .6))
-            #     Line(width = dp(4),
-            #           circle=(1080, 510, 38, 0, 360))   
-            #     Color(rgba=get_color_from_hex('#2bebc8'))
-            #     Line(width = dp(4),
-            #           circle=(1080, 510, 25, -90, 180)) 
-            #     Color(rgba=(.4, .4, 1, .1))
-            #     Line(width = dp(4),
-            #           circle=(1082, 510, 38, 0, 360))
-                
-            label_bar = MDLabel(text='100 \n bar',
-                                halign = "center",
-                                font_style= 'Overline',
-                                theme_text_color = "Custom",
-                                text_color=cores['background_widget'],
-                                pos_hint={'center_x':.5,'center_y':.5})
+
+#            with card_layout.canvas.after:
+#                 Color(rgba=(.4, .4, 1, .6))
+#                 Line(width = dp(4),
+#                   circle=(1080, 510, 38, 0, 360))
+#                 Color(rgba=get_color_from_hex('#2bebc8'))
+#                 Line(width = dp(4),
+#                   circle=(1080, 510, 25, -90, 180))
+#                 Color(rgba=(.4, .4, 1, .1))
+#                 Line(width = dp(4),
+#                   circle=(1082, 510, 38, 0, 360))
+
+            gauge = WGauge(name='gauge_ug03')()
+#            label_bar = MDLabel(text='100 \n bar',
+#                                halign = "center",
+#                                font_style= 'Overline',
+#                                theme_text_color = "Custom",
+#                                text_color=cores['background_widget'],
+#                                pos_hint={'center_x':.5,'center_y':.5})
             # # composicao
             #     # nivel 1
             box_titulo.add_widget(label_titulo)
             box_tabela.add_widget(box_grid)
-            box_gauge.add_widget(label_bar)
+            box_gauge.add_widget(gauge)
                 # nivel 1
             box_float.add_widget(box_titulo)
             box_float.add_widget(box_tabela)
             box_float.add_widget(box_gauge)
                 # nivel 3
             card_layout.add_widget(box_float)
-            
+
             # s1.instance_time('23-Lubrification')
             # s1.memory_size(getpid(),'Lubrification')
             return card_layout
-            
+
         except Exception as e:
             print('Lubrification: ',e)
-            
+
         return self
 
 

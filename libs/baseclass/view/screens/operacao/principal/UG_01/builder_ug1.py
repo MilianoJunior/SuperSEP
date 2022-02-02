@@ -18,11 +18,11 @@ class BuilderUG01(MDFloatLayout):
     -----------
         Composto por widgets da interface principal
     '''
-    
+
     def __init__(self,name,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.name = name
-        
+
     def __call__(self):
         try:
             # criar o layout main
@@ -55,23 +55,21 @@ class BuilderUG01(MDFloatLayout):
             # 0 desempenho : 0.902742862701416
             # 0 memoria : 213.01953125
             # 0 custo : 213.01953125
-            
+
             # 1 name : power
             # 1 tempo : 2.132324457168579
             # 1 desempenho : 1.229581594467163
             # 1 memoria : 226.875
             # 1 custo : 13.85546875
-            
-            
             #-------------------------------
             temperatures = Temperatures(name='temperatures')()
             lubrification = Lubrification(name='lubrification')()
-            
+
             box1_gauge.add_widget(gauge)
             box2_card_power.add_widget(power)
             box3_card_temperature.add_widget(temperatures)
             box4_card_lubrification.add_widget(lubrification)
-            
+
             self.add_widget(box1_gauge)
             self.add_widget(box2_card_power)
             self.add_widget(box3_card_temperature)
@@ -79,10 +77,10 @@ class BuilderUG01(MDFloatLayout):
             # s1.instance_time('19-UG-01')
             # s1.memory_size(getpid(),'UG-01')
             return self
-            
+
         except Exception as e:
             raise NotImplementedError(self.__class__.__name__ + str(e))
-            
+
         return self
     def on_size(self, *args):
         print('-----------------')

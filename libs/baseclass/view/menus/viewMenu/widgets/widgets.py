@@ -10,31 +10,29 @@ from kivymd.uix.button import MDIconButton
 from kivy.uix.image import Image
 from kivymd.uix.label import MDLabel
 from libs.baseclass.assets.color import *
-import os
 from libs.baseclass.view.menus.viewMenu.widgets.properties import *
 from libs.baseclass.utils.methods import *
 from kivy.core.window import Window
+import os
 # from desempenho import Desempenho
 
 # s1 = Desempenho()
 
 var =  StateVariable()
-PATH = os.path.abspath(__file__).split('libs')
-
-local = os.path.join(PATH[0],'libs\\baseclass\\assets\\imagens\\11.png')
+local = os.path.join(os.environ.get('ENGESEP_IMG'),'11.png')
 
 class MenuMobile(BuilderWidgets):
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.error = Error(self,'Menu Mobile')
-        
+
     def __call__(self):
         try:
             img = Image(source=local,size_hint=[.6,.6],
                         pos_hint={'center_x':.5,'center_y':.5},
                         color=cores['background_widget'])
-            
+
             menu_mobile = MDCard(elevation=20,
                           md_bg_color = cores['background'],
                           radius = [5,5,5,5],
@@ -43,17 +41,17 @@ class MenuMobile(BuilderWidgets):
             # s1.instance_time('10-MenuMobile')
             # s1.memory_size(os.getpid(),'MenuMobile')
             return menu_mobile
-            
+
         except Exception as e:
             self.error.msg(e)
 
 class Logo(MDBoxLayout):
-    
+
     def __init__(self,name, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.name = name
         # self.error = Error(self,'NavegationMenu')
-        
+
     def __call__(self):
         try:
             img = Image(source=local,size_hint=[1,1],
@@ -62,11 +60,11 @@ class Logo(MDBoxLayout):
             # s1.instance_time('7-Logo')
             # s1.memory_size(os.getpid(),'Logo')
             return img
-            
+
         except Exception as e:
             print('erro logo',e)
-            
-    
+
+
 labels = ['SuperSEP','Principal']
 
 class MenuPrincipal(BuilderWidgets):
@@ -74,7 +72,7 @@ class MenuPrincipal(BuilderWidgets):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.error = Error(self,'NavegationMenu')
-        
+
     def __call__(self):
         try:
             box = MDBoxLayout()
@@ -90,14 +88,14 @@ class MenuPrincipal(BuilderWidgets):
             # s1.instance_time('8-MenuPrincipal')
             # s1.memory_size(os.getpid(),'MenuPrincipal')
             return box
-            
+
         except Exception as e:
             self.error.msg(e)
-            
+
         return self
-    
+
 class TooltipIcon(MDTooltip,MDIconButton):
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.theme_text_color = "Custom"
@@ -105,8 +103,8 @@ class TooltipIcon(MDTooltip,MDIconButton):
         self.md_bg_color = cores['widget']
         self.elevation_normal = 12
         self.pos_hint = {"center_x": .5, "center_y": .5}
-    
- 
+
+
 icons = {
             'account'    : 'account-box',
             'config'       : 'cog-outline',
@@ -118,12 +116,12 @@ class CardMenu(BuilderWidgets):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.error = Error(self,'NavegationMenu')
-        
+
     def __call__(self):
         try:
             float_card = MDFloatLayout()
             box_card = MDBoxLayout(spacing=1)
-            var.register_change(box_card,box_card_properties)
+            var.register_change(box_card, box_card_properties)
             b=.5
             for name,icon in icons.items():
                 b+=.1
@@ -143,11 +141,11 @@ class CardMenu(BuilderWidgets):
             # s1.instance_time('9-CardMenu')
             # s1.memory_size(os.getpid(),'CardMenu')
             return float_card
-            
+
         except Exception as e:
             self.error.msg(e)
-            
+
         return self
-    
+
     def change_screen(self, *args):
         Window.system_size = [290,620]

@@ -1,3 +1,4 @@
+import os
 from libs.baseclass.view.factory.builder_widget import BuilderWidgets
 from libs.baseclass.exception_error import Error
 from kivymd.uix.boxlayout import MDBoxLayout
@@ -7,7 +8,6 @@ from kivymd.uix.card import MDCard
 from kivy.uix.scrollview import ScrollView
 from kivymd.uix.label import MDLabel
 from libs.baseclass.assets.color import *
-import os
 from libs.baseclass.view.menus.viewSideBar.widgets.properties import *
 from libs.baseclass.utils.methods import *
 from kivymd.uix.list import TwoLineAvatarIconListItem
@@ -23,15 +23,15 @@ from kivymd.uix.tab import MDTabsBase,MDTabs
 # s1 = Desempenho()
 
 var =  StateVariable()
-PATH = os.path.abspath(__file__).split('libs')
-local = os.path.join(PATH[0],'libs\\baseclass\\assets\\imagens\\12.png')
+
+local = os.path.join(os.environ.get('ENGESEP_IMG'),'12.png')
 
 class UserCard(BuilderWidgets):
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.error = Error(self,'UserCard')
-        
+
     def __call__(self):
         try:
             float_aux = MDFloatLayout()
@@ -55,50 +55,50 @@ class UserCard(BuilderWidgets):
                                    theme_text_color = "Custom",
                                    text_color = cores['background_widget'])
             var.register_change(avatar_layout, avatar_properties)
-            var.register_change(card_layout, card_properties)                       
+            var.register_change(card_layout, card_properties)
             avatar_layout.add_widget(img)
             avatar_layout.add_widget(icon)
             card_layout.add_widget(avatar_layout)
             float_aux.add_widget(card_layout)
-            
+
             # s1.instance_time('12-UserCard')
             # s1.memory_size(os.getpid(),'UserCard')
             return float_aux
-            
+
         except Exception as e:
             self.error.msg(e)
-            
 
-        
+
+
 class Search(BuilderWidgets):
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.error = Error(self,'Search menu lateral')
-        
+
     def __call__(self):
         try:
-            FONT_PATH = f"{os.environ['ENGESEP_ROOT']}\\libs\\baseclass\\assets\\fonts\\BERNIERRegular-Regular"
+#            FONT_PATH = f"{os.environ['ENGESEP_ROOT']}\\libs\\baseclass\\assets\\fonts\\BERNIERRegular-Regular"
             float_aux = MDFloatLayout()
             search_button = MDTextField(hint_text='Search',
                                         mode = 'rectangle',
                                         _current_line_color = cores['widget'],
-                                        font_name_hint_text = FONT_PATH,
+#                                        font_name_hint_text = FONT_PATH,
                                         size_hint=[.76,.3],
                                         pos_hint={'center_x':.5,'center_y':.5})
             search_button.current_hint_text_color = cores['secundary']
             float_aux.add_widget(search_button)
             var.register_remove(float_aux,search_button,remove_search)
-            
+
             # s1.instance_time('13-Search')
             # s1.memory_size(os.getpid(),'Search')
             return float_aux
-            
+
         except Exception as e:
             self.error.msg(e)
 
 class TableSidebar(BuilderWidgets):
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.error = Error(self,'Search menu lateral')
@@ -121,7 +121,7 @@ class TableSidebar(BuilderWidgets):
             main_table = MDBoxLayout(size_hint_y=None)
             main_table.bind(minimum_height=main_table.setter('height'))
             lista = MDList()
-            
+
             for names,values in lista_data.items():
                 text_linha = ''
                 for n,v in values['values'].items():
@@ -156,7 +156,7 @@ class TableSidebar(BuilderWidgets):
                                              theme_text_color = "Custom",
                                              user_font_size = 15,
                                              text_color = values['state'][1])
-                
+
                 avatar_layout.add_widget(icon)
                 avatar_layout.add_widget(icon_alerta)
                 box.add_widget(avatar_layout)
@@ -167,14 +167,14 @@ class TableSidebar(BuilderWidgets):
             box_table.add_widget(root)
             float_aux.add_widget(box_menu)
             float_aux.add_widget(box_table)
-            
+
             # s1.instance_time('14-TableSidebar')-
             # s1.memory_size(os.getpid(),'TableSidebar')-----
             return float_aux
 
         except Exception as e:
             self.error.msg(e)
-            
+
     def expand_info(self,*args):
         if args[2] in args[1].children:
             args[1].remove_widget(args[2])
@@ -185,16 +185,16 @@ class TableSidebar(BuilderWidgets):
 
 class TabSidebar(MDFloatLayout, MDTabsBase):
     '''Class implementing content for a tab.'''
-    
+
 class GraphSidebar(MDFloatLayout):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.error = Error(self,'Search menu lateral')
-            
+
     def __call__(self):
         try:
-            FONT_PATH = f"{os.environ['ENGESEP_ROOT']}\\libs\\baseclass\\assets\\fonts\\BERNIERRegular-Regular"
+#            FONT_PATH = f"{os.environ['ENGESEP_ROOT']}\\libs\\baseclass\\assets\\fonts\\BERNIERRegular-Regular"
             card_layout = MDCard(orientation='vertical',
                                   elevation=20,
                                   size_hint = (.8,.9),
@@ -206,7 +206,7 @@ class GraphSidebar(MDFloatLayout):
             tab = MDTabs(tab_bar_height="30dp",
                          background_color=cores['background'],
                          tab_indicator_height="1dp",
-                         font_name= FONT_PATH,
+#                         font_name= FONT_PATH,
                          )
             for s in ['diário','semanal','mensal']:
                 title = TabSidebar(title=f'[size=12]{s}[/size]')
@@ -217,11 +217,10 @@ class GraphSidebar(MDFloatLayout):
             # s1.instance_time('15-GraphSidebar')
             # s1.memory_size(os.getpid(),'GraphSidebar')
             return self
-            
+
         except Exception as e:
             self.error.msg(e)
 
 
 
 
-            

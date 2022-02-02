@@ -1,5 +1,5 @@
-from desempenho import Desempenho
-s2 = Desempenho()
+clear#from desempenho import Desempenho
+#s2 = Desempenho()
 from kivy import Config
 # import importlib
 import multiprocessing
@@ -40,47 +40,30 @@ force-hardware: 17.3-cpu,342.2 ram, 1.6 GPU
 [force-hardware: 2, maxfps: 2, multisamples: 3]: 4.0-cpu,343.7 ram, 2.8 GPU
 
 [force-hardware: 2, maxfps: 2, multisamples: 5]: 0.6-cpu,343.7 ram, 2.8 GPU
-
 '''
-
-
+import os,sys
+from pathlib import Path
+os.environ["ENGESEP_LANG"] = "1"
+if getattr(sys, "frozen", False):  # bundle mode with PyInstaller
+    os.environ["ENGESEP_ROOT"] = sys._MEIPASS
+else:
+    os.environ["ENGESEP_ROOT"] = str(Path(__file__).parent)
+os.environ["ENGESEP_ASSETS"] = os.path.join(os.environ["ENGESEP_ROOT"], f"assets{os.sep}")
+os.environ["ENGESEP_IMG"] = os.path.join(os.environ["ENGESEP_ROOT"], f"libs{os.sep}baseclass{os.sep}assets{os.sep}imagens{os.sep}")
 from kivy.clock import mainthread
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
-
-import os,sys
-from pathlib import Path
 from libs.baseclass.assets.fonts import Fonts
 from kivy.factory import Factory  # NOQA: F401
 from kivymd.app import MDApp
 from kivy.core.window import Window
-from kivy.base import ExceptionManager, ExceptionHandler
+from kivy.base import ExceptionManager
 import ctypes
 from libs.baseclass.composite import Composite
+from screeninfo import get_monitors
+from libs.baseclass.exception_error import E
 
-user32 = ctypes.windll.user32
-screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)*.96
-
-# raise RuntimeError('não vair prosseguir')
-
-# verificação do sistema operacional e apontamento da pasta relativa geral
-os.environ["ENGESEP_LANG"] = "1"
-
-if getattr(sys, "frozen", False):  # bundle mode with PyInstaller
-    os.environ["ENGESEP_ROOT"] = sys._MEIPASS
-else:
-    # print(sys.path.append(os.path.abspath(__file__).split("demos")[0]))
-    os.environ["ENGESEP_ROOT"] = str(Path(__file__).parent)
-    
-os.environ["ENGESEP_ASSETS"] = os.path.join(os.environ["ENGESEP_ROOT"], f"assets{os.sep}")
-
-
-'''
-sincronização de multiprocessos
-
-'''
-
-
+screensize = [get_monitors()[0].width, get_monitors()[0].height]
 registrar_componentes = ['construtor.py','main.py','interfaces.py','homescreen.py','header.py',
                           'footer.py','struct.py','sidebar.py','register_interfaces.py',
                           'group_buttons.py','option_menu.py','timer_picker.py','tabs.py',
@@ -94,22 +77,10 @@ registrar_componentes = ['construtor.py','main.py','interfaces.py','homescreen.p
                           'posicoes.py','graph.py','builder_ug1.py','builder_ug2.py','menu_lateral.py','gauge.py','input_text.py',
                           'button_emergency.py','tables.py']
 
-# Tratamento de execeção controle geral de todos os erros
-
-class E(ExceptionHandler):
-    def handle_exception(self, inst):
-        
-        # print('Erro ------------------------------')
-        print(inst)
-  
-        return ExceptionManager.PASS
-
 def abrir():
-    os.system("start python main.py")
-       
+    os.system("clear")
+    os.system("python3 main.py")
 
- 
-ExceptionManager.add_handler(E())
 class KvHandler(FileSystemEventHandler):
     def __init__(self, callback, target, **kwargs):
         super(KvHandler, self).__init__(**kwargs)
@@ -122,15 +93,12 @@ class KvHandler(FileSystemEventHandler):
                 self.callback(os.path.basename(event.src_path))
 
 class EngeSEPApp(MDApp):
-    
-    # window_x = NumericProperty(Window.system_size[0]*0.8)
-    # window_y = NumericProperty(Window.system_size[1])
     cont = 0
-    
+
     def __init__(self: object,**kwargs)->None:
-        
         super().__init__(**kwargs)
         self.theme_cls.theme_style = "Dark"
+#        ExceptionManager.add_handler(E(self))
         # fonts_ = ['Blacker-Display-Bold-trial',
         #           'ZenOldMincho-Black',
         #           'Nunito-Black',
@@ -141,166 +109,40 @@ class EngeSEPApp(MDApp):
         #           'Evogria.otf',
         #           'Eczar-Regular',
         #           'Eczar-Bold']
-        
+
         font = Fonts()('Eczar-Regular')
-        self.theme_cls.font_styles.update(font)   
+        self.theme_cls.font_styles.update(font)
         Window.system_size = screensize
-        # Window.top = 20
-        # Window.left = 10
-        # Window.fullscreen = 1
         self.titulo = 'SuperSEP'
-        # self.ficha = True
-  
+
     def build(self: object)->object:
-        
         try:
             TARGET = [ files for files in os.listdir(f"{os.environ['ENGESEP_ROOT']}")]
             PATH = os.environ["ENGESEP_ROOT"]
             o = Observer()
             o.schedule(KvHandler(self.update, TARGET), PATH,recursive=True)
-            o.start() 
-            # pc2 = multiprocessing.Process(target=abrir)
-            # pc2.start()
-            # pc2.join()
+            o.start()
             return Composite()()
-        
+
         except Exception as e:
-            print(e)     
+            print(e)
+    def on_stop(self, *args):
+        print('Fechando o app')
+
     def on_start(self):
-        print('------------------------')
         print('On_start')
-        # def recursiva(objs):
-        #     self.cont += 1
-        #     for obj in objs:
-        #         try:
-        #             print('name: ',obj.name)
-        #         except:
-        #             print('sem nome')
-        #         for s in obj.children:
-        #             lista = getattr(s, 'children')
-        #             if len(lista)>0:
-        #                 print(self.cont,lista)
-        #                 recursiva(lista)
-        #             print('---')
-        # recursiva([self.root])        
+
     @mainthread
     def update(self,target,*args):
         pc2 = multiprocessing.Process(target=abrir)
         pc2.start()
         pc2.join()
         self.get_running_app().stop()
-        
+
 if __name__ == "__main__":
     try:
         app = EngeSEPApp()
         app.run()
     except Exception as inst:
         print(inst)
-        # app = Error(inst).run()
-        
 
-    
-        
-# def importar():
-#     from desempenho import Desempenho
-#     s1 = Desempenho()
-    
-#     # import os
-#     # os.environ['KIVY_TEXT'] = 'pil'
-    
-#     import os
-#     import sys
-#     from pathlib import Path
-#     # import kivy
-#     # kivy.require('2.1.0')
-#     # sysconfig.get_config_var('LINKFORSHARED')
-#     from kivy.factory import Factory  # NOQA: F401
-#     from kivymd.app import MDApp
-#     from kivy.core.window import Window
-#     # from kivy.clock import mainthread
-#     # from kivy.properties import NumericProperty
-#     from libs.baseclass.composite import Composite
-#     from libs.baseclass.assets.fonts import Fonts
-#     # from watchdog.observers import Observer
-#     # from watchdog.events import FileSystemEventHandler
-#     import multiprocessing
-#     from kivy.base import ExceptionManager, ExceptionHandler
-#     import ctypes
-#     user32 = ctypes.windll.user32
-#     screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)*.95
-        
-        
-# a = globals().copy()
-# print(a)
-# for name,value in a.items():
-#     if name[0] != '_':
-#         print(name)
-#         print(value)
-#         print('---')
-
-
-# obj = Composite()
-
-# globals()['Composite'] = module
-
-# For illustrative purposes.
-
-    
-# from pathlib import Path
-# import os
-# def import_dynamic():
-
-#     # list_import = [['pathlib','Path'],'os','sys',['kivy.factory','Factory'],
-#     #                 ['kivymd.app','App'],['kivy.core.window','Window'],
-#     #                 ['libs.baseclass.composite','Composite'],
-#     #                 ['libs.baseclass.assets.fonts','Fonts'],'multiprocessing',
-#     #                 ['kivy.base','ExceptionHandler'],['kivy.base','ExceptionManager'],'ctypes'] 
-#     list_import = ['libs.baseclass.composite','Composite']
-#     for s in list_import:
-#         print(s)
-#         if isinstance(s,list):
-#             # module = __import__(s[0]) 
-#             module =importlib.import_module(s[0],".")
-#             globals()[s[1]] = module
-#         else:
-#             module = __import__(s) 
-#             globals()[s[1]] = module
-            
-
-        # module = import_module(s)
-        # print(s)
-        # globals()[s.split('.')[-1]] = module
-        # print(s.split('.')[-1])
-        # print(s)
-        # print('--')
-        # globals()[s.split('.')[-1]] = a
-    # a = __import__('kivymd')
-    # uix = [ files for files in os.listdir(f"{a.path}/uix")]
-    # for file in uix:
-    #     filename = file[:-3]
-    #     if os.path.isdir(f"{a.path}/uix/{file}"):
-    #         pass
-    #     else:
-    #         try:
-    #             path_mod = f"{'kivymd'}.uix.{filename}"
-    #             module = import_module(path_mod)
-    #             for name, obj in inspect.getmembers(module):
-    #                     if inspect.isclass(obj):
-    #                         globals()[name] = obj
-    #         except Exception as e:
-    #             raise RuntimeError(f'Erro função import_dynamic do constutor: {str(e)}')
-
-# import_dynamic()
-
-# a = globals().copy()
-# # print(a)
-# for name in a:
-#     print(name)
-#     # print(value)
-#     print('---')
-    
-
-# obj = Composite()
-    
-        
-        

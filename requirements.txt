@@ -7,4 +7,5 @@ seaborn==0.11.2
 Unidecode==1.3.2
 asynckivy==0.5.2
 openpyxl==3.0.9
-
+memory-profiler==0.60.0
+screeninfo

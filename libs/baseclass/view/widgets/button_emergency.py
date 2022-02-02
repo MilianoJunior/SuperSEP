@@ -9,36 +9,35 @@ from kivy.properties import ListProperty,NumericProperty
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.button import MDIconButton
 from kivy.clock import Clock
-from os.path import join, abspath
+#from os.path import join, abspath
+import os
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivy.animation import Animation
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.image import Image
 
+local = os.path.join(os.environ.get('ENGESEP_IMG'),'emergecy.jpg')
+#local = join(os.eviroment.get('ENGESEP_IMG'),'emergecy.jpg')
 
-PATH = abspath(__file__).split('libs')
-
-local = join(PATH[0],'libs\\baseclass\\assets\\imagens\\emergecy.jpg')
-
-class ImageButton(ButtonBehavior, Image):  
+class ImageButton(ButtonBehavior, Image):
     pass
 
 class ButtonEmergency(MDBoxLayout):
-    
+
     font = NumericProperty(0.41)
-    
+
     def __init__(self,name: str, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.orientation = 'vertical'
         self.name = name
         self.md_bg_color = cores['widget']
         self.padding=[0,0,0,10]
-        self.size_hint=(1,1) 
+        self.size_hint=(1,1)
         self.pos_hint={'x':0,'y': 0}
         self.radius = [0,0,15,15]
         self.state = False
     def __call__(self):
-        
+
         label_aviso = MDLabel(text='Botão de emergência',
                                 halign = "center",
                                 theme_text_color = "Custom",
@@ -49,7 +48,7 @@ class ButtonEmergency(MDBoxLayout):
         self.img.fbind('on_press',self.emergency_state,label_aviso)
         self.add_widget(label_aviso)
         self.add_widget(self.img)
-        
+
         return self
     def emergency_state(self,*args):
         a = Animation(md_bg_color=cores['background_widget'])

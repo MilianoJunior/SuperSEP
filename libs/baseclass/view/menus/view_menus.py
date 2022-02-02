@@ -13,7 +13,7 @@ class ViewMenus(MDFloatLayout):
     -----------
         Composto por outros 3 layouts: Menu, SideBar, Footer
     '''
-    
+
     def __init__(self,name, *args,**kwargs):
         super().__init__(*args,**kwargs)
 
@@ -22,17 +22,17 @@ class ViewMenus(MDFloatLayout):
             menu = Menu(name='Menu_SuperSEP')()
             sidebar = SideBar(name='SideBar_SuperSEP')()
             menuLateral = MenuLateral(name='Menu_Lateral_SuperSEP')()
-            
+#
             self.add_widget(menu)
             self.add_widget(sidebar)
             self.add_widget(menuLateral)
-            
+
             # s2.instance_time('5-ViewMenus')
             # s2.memory_size(getpid(),'ViewMenus')
             return self
-            
+
         except Exception as e:
             print('ViewMenus: ',e)
-            
+
         return self
 
